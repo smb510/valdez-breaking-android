@@ -1,6 +1,5 @@
 package com.scottiebiddle.valdezbreakingnews.adapter;
 
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,16 +7,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.scottiebiddle.valdezbreakingnews.R;
-import com.scottiebiddle.valdezbreakingnews.models.Story;
+import com.scottiebiddle.valdezbreakingnews.db.Story;
+import com.yahoo.squidb.data.SquidCursor;
+
+import java.text.DateFormat;
+import java.util.Date;
+
 
 /**
  * Created by scottie on 4/13/15.
  */
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFeedViewHolder> {
 
-    private Cursor mCursor;
+    private SquidCursor<Story> mCursor;
 
-    public NewsFeedAdapter(Cursor cursor) {
+    public NewsFeedAdapter(SquidCursor<Story> cursor) {
         mCursor = cursor;
     }
 
@@ -30,9 +34,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
     @Override
     public void onBindViewHolder(NewsFeedViewHolder viewHolder, int i) {
         mCursor.moveToPosition(i);
-        Story story = Story.fromCursor(mCursor);
-        viewHolder.mBodyText.setText(story.eventBody);
-        viewHolder.mHeadlineText.setText(story.eventType);
+        Story story = new Story(mCursor);
+        viewHolder.mBodyText.setText(story.getEventBody());
+        viewHolder.mHeadlineText.setText(story.getEventType());
+        long importDate = story.getImportTime();
+        Date date = new Date(importDate);
+        viewHolder.mDateline.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(date));
+
     }
 
     @Override
@@ -45,11 +53,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
 
         TextView mBodyText;
         TextView mHeadlineText;
+        TextView mDateline;
 
         public NewsFeedViewHolder(View itemView) {
             super(itemView);
             mBodyText = (TextView) itemView.findViewById(R.id.body);
             mHeadlineText = (TextView) itemView.findViewById(R.id.headline);
+            mDateline = (TextView) itemView.findViewById(R.id.event_date);
         }
     }
 }

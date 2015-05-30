@@ -1,1 +1,8 @@
-include ':app'
+include ':app', ':squidb-jackson-compiler', ':squidb-annotations', ':squidb-processor', ':squidb-tests', ':squidb-jackson-annotations', ':squidb-jackson-plugin', ':squidb'
+project(':squidb-jackson-compiler').projectDir = new File('framework/squidb/squidb-jackson-compiler')
+project(':squidb-annotations').projectDir = new File('framework/squidb/squidb-annotations')
+project(':squidb-processor').projectDir = new File('framework/squidb/squidb-processor')
+project(':squidb-tests').projectDir = new File('framework/squidb/squidb-tests')
+project(':squidb-jackson-annotations').projectDir = new File('framework/squidb/squidb-jackson-annotations')
+project(':squidb-jackson-plugin').projectDir = new File('framework/squidb/squidb-jackson-plugin')
+project(':squidb').projectDir = new File('framework/squidb/squidb')

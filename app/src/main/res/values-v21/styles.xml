@@ -4,7 +4,8 @@
         <item name="android:colorPrimary">@color/app_500</item>
         <item name="android:colorPrimaryDark">@color/app_700</item>
         <item name="android:colorAccent">@color/accent_200</item>
-        <item name="android:textColorPrimary">@color/app_100</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:windowBackground">@color/app_100</item>
     </style>
 
     <style name="HeadlineTextApperance" parent="android:TextAppearance">
