@@ -2,6 +2,10 @@ package com.scottiebiddle.valdezbreakingnews;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.AsyncTaskLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.scottiebiddle.valdezbreakingnews.adapter.NewsFeedAdapter;
+import com.scottiebiddle.valdezbreakingnews.adapter.NewsFeedAdapter.OnFavoriteChangedListener;
 import com.scottiebiddle.valdezbreakingnews.adapter.StoriesDao;
 import com.scottiebiddle.valdezbreakingnews.db.Story;
 import com.yahoo.squidb.data.SquidCursor;
@@ -20,14 +25,14 @@ import com.yahoo.squidb.sql.Query;
 
 public class NewsfeedActivity extends Activity {
 
-    private PlaceholderFragment mFragment;
+    private NewsFeedFragment mFragment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newsfeed);
-        mFragment = new PlaceholderFragment();
+        mFragment = new NewsFeedFragment();
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, mFragment)
@@ -61,14 +66,17 @@ public class NewsfeedActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, NewsStoryDataService.OnNewsStoryRefreshCompleteListener {
+    public static class NewsFeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+            NewsStoryDataService.OnNewsStoryRefreshCompleteListener,
+            LoaderManager.LoaderCallbacks<Cursor>,
+            OnFavoriteChangedListener{
 
-        public PlaceholderFragment() {
+        public NewsFeedFragment() {
         }
 
         private SwipeRefreshLayout mSwipeRefreshLayout;
         private RecyclerView mRecyclerView;
-        private SquidCursor<Story> mCursor;
+        private NewsFeedAdapter mAdapter;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,19 +96,15 @@ public class NewsfeedActivity extends Activity {
         @Override
         public void onStart() {
             super.onStart();
-            StoriesDao mDataSource = new StoriesDao(getActivity());
-            mCursor = mDataSource.query(Story.class, Query.select(Story.PROPERTIES).orderBy(Story.IMPORT_TIME.desc()));
-            NewsFeedAdapter adapter = new NewsFeedAdapter(mCursor);
-            mRecyclerView.setAdapter(adapter);
-
+            mAdapter = new NewsFeedAdapter(null);
+            mAdapter.setmListener(this);
+            mRecyclerView.setAdapter(mAdapter);
+            getLoaderManager().initLoader(1, null, this);
         }
 
         @Override
         public void onStop() {
             super.onStop();
-            if (mCursor != null && !mCursor.isClosed()) {
-                mCursor.close();
-            }
         }
 
         @Override
@@ -113,11 +117,43 @@ public class NewsfeedActivity extends Activity {
         @Override
         public void onRefreshComplete() {
             mSwipeRefreshLayout.setRefreshing(false);
-            StoriesDao mDataSource = new StoriesDao(getActivity());
-            mCursor = mDataSource.query(Story.class, Query.select(Story.PROPERTIES).orderBy(Story.IMPORT_TIME.desc()));
-            NewsFeedAdapter adapter = new NewsFeedAdapter(mCursor);
-            mRecyclerView.setAdapter(adapter);
+            getLoaderManager().restartLoader(1, null, this);
 
         }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            return new AsyncTaskLoader<Cursor>(getActivity()) {
+
+                @Override
+                public Cursor loadInBackground() {
+                    StoriesDao mStoriesDao = new StoriesDao(getContext());
+                    return mStoriesDao.query(Story.class, Query.select(Story.PROPERTIES).orderBy(Story.IMPORT_TIME.desc()));
+                }
+
+                @Override
+                public void onStartLoading() {
+                    forceLoad();
+                }
+            };
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            mAdapter.swapCursor((SquidCursor<Story>) data);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            mAdapter.swapCursor(null);
+        }
+
+
+        @Override
+        public void onFavoriteChanged() {
+            getLoaderManager().restartLoader(1, null, this);
+        }
     }
+
+
 }

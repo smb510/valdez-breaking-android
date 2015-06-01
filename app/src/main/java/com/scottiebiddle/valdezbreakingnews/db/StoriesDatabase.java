@@ -28,7 +28,7 @@ public class StoriesDatabase extends AbstractDatabase {
 
     @Override
     protected int getVersion() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -43,6 +43,12 @@ public class StoriesDatabase extends AbstractDatabase {
 
     @Override
     protected boolean onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        return false;
+
+        switch(newVersion) {
+            case 2:
+                tryAddColumn(Story.IS_FAVORITE);
+        }
+
+        return true;
     }
 }

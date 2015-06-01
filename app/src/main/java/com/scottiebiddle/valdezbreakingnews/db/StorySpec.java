@@ -15,4 +15,7 @@ public class StorySpec {
     @ColumnSpec(constraints = "UNIQUE")
     public long storyId;
 
+    @ColumnSpec(defaultValue = "0")
+    public boolean isFavorite;
+
 }

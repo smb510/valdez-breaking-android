@@ -12,6 +12,7 @@ public class Story {
     public String eventType;
     public String eventBody;
     public long importDate;
+    public boolean isFavorite;
 //    public boolean isBroadcast;
 
     public static final String[] COLUMNS = {
@@ -52,6 +53,8 @@ public class Story {
         story.eventBody = cursor.getString(index);
         index = cursor.getColumnIndex("importDate");
         story.importDate = cursor.getLong(index);
+        index = cursor.getColumnIndex("isFavorite");
+        story.isFavorite = cursor.getInt(index) == 1;
         return story;
     }
 
