@@ -2,12 +2,9 @@ package com.scottiebiddle.valdezbreakingnews.adapter;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -96,68 +93,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
             }
         });
 
-        viewHolder.mStoryContainer.setOnTouchListener(new View.OnTouchListener() {
-
-            private float downTouchX;
-
-            private float deltaXThreshold = viewHolder.mActionsContainer.getWidth();
-            private float width = viewHolder.mStoryContainer.getWidth();
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        isDown = true;
-                        downTouchX = event.getX();
-                        return true;
-                    case MotionEvent.ACTION_CANCEL:
-                        Log.d("SCOTTIE", "cancel!");
-                    case MotionEvent.ACTION_UP:
-                        isDown = false;
-                        float translationX = viewHolder.mStoryContainer.getTranslationX();
-                        if (translationX <= (-1.0f * deltaXThreshold) / 2.0f) {
-                            viewHolder.mStoryContainer.animate()
-                                    .translationX(-1 * deltaXThreshold)
-                                    .setInterpolator(new OvershootInterpolator())
-                                    .setDuration(100)
-                                    .withEndAction(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            viewHolder.mStoryContainer.setTranslationX(-1 * deltaXThreshold);
-                                        }
-                                    })
-                                    .start();
-                        } else {
-                            viewHolder.mStoryContainer.animate()
-                                    .translationX(0)
-                                    .setInterpolator(new OvershootInterpolator())
-                                    .setDuration(100)
-                                    .withEndAction(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            viewHolder.mStoryContainer.setTranslationX(0);
-                                        }
-                                    })
-                                    .start();
-                        }
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        float delta = event.getX() - downTouchX;
-                        if (delta < 0) {
-                            float maxTranslation = -1 * (deltaXThreshold);
-                            float translation = Math.min(0, Math.max(delta, maxTranslation));
-                            viewHolder.mStoryContainer.setTranslationX(translation);
-                        } else if (viewHolder.mStoryContainer.getTranslationX() < 0) {
-                            float currentTranslation = viewHolder.mStoryContainer.getTranslationX();
-                            viewHolder.mStoryContainer.setTranslationX(Math.min(0, currentTranslation + delta));
-
-                        }
-                        return true;
-
-                }
-                return false;
-            }
-        });
 
     }
 
