@@ -1,5 +1,6 @@
 package com.scottiebiddle.valdezbreakingnews.adapter;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +82,17 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
             }
         });
 
+        viewHolder.mRootView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, story.getEventType() + "\n" + story.getEventBody());
+                viewHolder.mStoryContainer.getContext().startActivity(share);
+                return true;
+            }
+        });
+
 
     }
 
@@ -96,7 +108,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
         TextView mBodyText;
         TextView mHeadlineText;
         TextView mDateline;
-//        ImageButton mShareButton;
+//        Button mShareButton;
         ImageView mFavoriteButton;
         RelativeLayout mStoryContainer;
 
@@ -106,7 +118,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
             mBodyText = (TextView) itemView.findViewById(R.id.body);
             mHeadlineText = (TextView) itemView.findViewById(R.id.headline);
             mDateline = (TextView) itemView.findViewById(R.id.event_date);
-//            mShareButton = (ImageButton) itemView.findViewById(R.id.share_button);
+//            mShareButton = (Button) itemView.findViewById(R.id.share_button);
             mFavoriteButton = (ImageView) itemView.findViewById(R.id.favorite_button);
             mStoryContainer = (RelativeLayout) itemView.findViewById(R.id.story_container);
         }
