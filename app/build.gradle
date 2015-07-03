@@ -15,11 +15,13 @@ android {
     buildTypes {
 
         debug {
+            resValue  "bool", "enableStetho", "true"
             minifyEnabled false
         }
 
 
         release {
+            resValue  "bool", "enableStetho", "false"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

@@ -1,12 +1,10 @@
 package com.scottiebiddle.valdezbreakingnews.adapter;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -65,16 +63,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
         } else {
             viewHolder.mFavoriteButton.setImageResource(R.drawable.ic_star_border_black_24dp);
         }
-        viewHolder.mShareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent();
-                i.setAction(Intent.ACTION_SEND);
-                i.putExtra(Intent.EXTRA_TEXT, story.getEventType() + "\n" + story.getEventBody());
-                i.setType("text/plain");
-                v.getContext().startActivity(Intent.createChooser(i, "Share Story"));
-            }
-        });
+//        viewHolder.mShareButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent();
+//                i.setAction(Intent.ACTION_SEND);
+//                i.putExtra(Intent.EXTRA_TEXT, story.getEventType() + "\n" + story.getEventBody());
+//                i.setType("text/plain");
+//                v.getContext().startActivity(Intent.createChooser(i, "Share Story"));
+//            }
+//        });
 
         viewHolder.mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,9 +105,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
         TextView mBodyText;
         TextView mHeadlineText;
         TextView mDateline;
-        ImageButton mShareButton;
-        ImageButton mFavoriteButton;
-        LinearLayout mActionsContainer;
+//        ImageButton mShareButton;
+        ImageView mFavoriteButton;
         RelativeLayout mStoryContainer;
 
         public NewsFeedViewHolder(View itemView) {
@@ -117,9 +114,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
             mBodyText = (TextView) itemView.findViewById(R.id.body);
             mHeadlineText = (TextView) itemView.findViewById(R.id.headline);
             mDateline = (TextView) itemView.findViewById(R.id.event_date);
-            mShareButton = (ImageButton) itemView.findViewById(R.id.share_button);
-            mFavoriteButton = (ImageButton) itemView.findViewById(R.id.favorite_button);
-            mActionsContainer = (LinearLayout) itemView.findViewById(R.id.action_container);
+//            mShareButton = (ImageButton) itemView.findViewById(R.id.share_button);
+            mFavoriteButton = (ImageView) itemView.findViewById(R.id.favorite_button);
             mStoryContainer = (RelativeLayout) itemView.findViewById(R.id.story_container);
         }
     }

@@ -21,7 +21,6 @@ public class StoriesItemViewHelper extends ItemTouchHelper {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                viewHolder.
 
 
                 Log.d("SCOTTIEBUG", "swiped: " + direction);
