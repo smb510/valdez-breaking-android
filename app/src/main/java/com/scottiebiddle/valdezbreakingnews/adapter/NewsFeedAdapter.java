@@ -63,18 +63,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
         } else {
             viewHolder.mFavoriteButton.setImageResource(R.drawable.ic_star_border_black_24dp);
         }
-//        viewHolder.mShareButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent();
-//                i.setAction(Intent.ACTION_SEND);
-//                i.putExtra(Intent.EXTRA_TEXT, story.getEventType() + "\n" + story.getEventBody());
-//                i.setType("text/plain");
-//                v.getContext().startActivity(Intent.createChooser(i, "Share Story"));
-//            }
-//        });
 
-        viewHolder.mFavoriteButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 StoriesDao dao = new StoriesDao(v.getContext());
@@ -102,6 +92,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
 
     public static class NewsFeedViewHolder extends RecyclerView.ViewHolder {
 
+        View mRootView;
         TextView mBodyText;
         TextView mHeadlineText;
         TextView mDateline;
@@ -111,6 +102,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
 
         public NewsFeedViewHolder(View itemView) {
             super(itemView);
+            mRootView = itemView.findViewById(R.id.root_view);
             mBodyText = (TextView) itemView.findViewById(R.id.body);
             mHeadlineText = (TextView) itemView.findViewById(R.id.headline);
             mDateline = (TextView) itemView.findViewById(R.id.event_date);
