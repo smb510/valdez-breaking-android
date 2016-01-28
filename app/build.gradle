@@ -39,4 +39,5 @@ dependencies {
     compile project(':squidb-annotations')
     apt project(':squidb-processor')
     compile 'com.facebook.stetho:stetho:1.1.1'
+    compile 'com.android.support:design:22.2.0'
 }
